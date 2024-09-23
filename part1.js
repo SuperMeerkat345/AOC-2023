@@ -252,12 +252,12 @@ function assignWinners () {
 
         switch (tempScores.length) {
             case 0:
-                break;
+                break; // no matches do nothing
             case 1:
-                scores.push(1);
+                scores.push(1); // 1 match so 1 score
                 break;
             default:
-                let tempVal = 0;
+                let tempVal = 0; // 2+ matches
                 for (let i in tempScores) {
                     if (tempVal === 0) {
                         tempVal += 1;
@@ -284,4 +284,4 @@ assignWinners();
 getAnswer();
 
 console.log("scores: ", scores);
-console.log("Answer: ", answer);
+console.log("Answer: ", answer); // returns 26346
