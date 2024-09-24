@@ -243,66 +243,53 @@ function transformInput () {
     }
 }
 
-function populateCardsArr () {
-    for (let i = 0; i < input.length; i++) {
-        cardsArr.push(1);
-    }
+function populateCardsArr() {
+    cardsArr = new Array(input.length).fill(1); // Initialize all cards to 1
 }
 
-function iterateCards () {
-    for (let i in cardsArr) { // iterate through every card
-        for (let j in cardsArr[i]) { // iterate through every existing card of this card
+function iterateCards() {
+    for (let i = 0; i < 220; i++) { // Iterate through every card
+        console.log(i);
+        console.log(cardsArr[i]);
+        for (let j = 0; j < cardsArr[i]; j++) { // Iterate through every existing card of this card
             assignWinners(input[i], i); // ([winners][actualCards], cardIndex)
         }
     }
 }
 
-// helper method for iterateCards
-function assignWinners (card, index) {
-    console.log("assigning");
-    let tempScores = [];
+function assignWinners(card, index) {
+    // Use a Set to track player's numbers for faster lookups
+    let playerNumbersSet = new Set(card[1]);
+    let tempScores = card[0].filter(num => playerNumbersSet.has(num)); // Get the matches
 
-    // populate tempScores
-    for (let i in card[0]) {
-        for (let j in card[1]) {
-            if (card[0][i] === card[1][j]) {
-                tempScores.push(card[1][j]);
-            }
-        }
-    }
-
-    // now we can get our score
+    // Calculate score based on the number of matches
     let score = 0;
-
     switch (tempScores.length) {
         case 0:
-            break; // no matches do nothing
-        case 1:
-            score = 1; // 1 match so 1 score
+            score = 0; // No matches
             break;
-        default: // 2+ matches
-            for (let i in tempScores) {
-                if (score === 0) {
-                    score += 1;
-                } else {
-                    score *= 2;
-                }
+        case 1:
+            score = 1; // 1 match = 1 point
+            break;
+        default:
+            score = 1; // Start with 1 point
+            for (let i = 1; i < tempScores.length; i++) {
+                score *= 2; // Double the score for each additional match
             }
             break;
     }
 
-    //now that we know our score we can add the cards we won
-    for (let i = 0; i < score; i++) { // remember index is the card we're on
-        cardsArr[index + i + 1] += 1; // get the current card + the number of iterations we are on, also add one to the iterations because we start adding to the cards after the card we calculated
-    }
-};
+    // Add the score to cardsArr for the next cards
 
-function getAnswer () {
-    cards = 0;
-
-    for (let card in cardsArr) {
-        cards += card
+    for (let i = 0; i < score; i++) {
+        if (cardsArr[index + i + 1] !== undefined) {
+            cardsArr[index + i + 1] += 1; // Avoid accessing out-of-bounds
+        }
     }
+}
+
+function getAnswer() {
+    cards = cardsArr.reduce((acc, val) => acc + val, 0); // Sum up all cards
 }
 
 transformInput(); // get desired input syntax
@@ -316,4 +303,4 @@ getAnswer(); // add up all the cards
 //console.log("Input: ", input);
 //console.log("scores: ", scores);
 console.log("Cards Array: ", cardsArr);
-console.log("Answer: ", cards); 
+console.log("Answer: ", cards); // not tested
