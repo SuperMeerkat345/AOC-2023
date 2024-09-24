@@ -250,17 +250,18 @@ function populateCardsArr() {
 function iterateCards() {
     for (let i = 0; i < 220; i++) { // Iterate through every card
         console.log(i);
-        console.log(cardsArr[i]);
-        for (let j = 0; j < cardsArr[i]; j++) { // Iterate through every existing card of this card
-            assignWinners(input[i], i); // ([winners][actualCards], cardIndex)
-        }
+        //console.log(cardsArr[i]);
+        
+        //now it calcs all card combinations for that specific value
+        assignWinners(input[i], i); // ([winners][actualCards], cardIndex)
+        
     }
 }
 
 function assignWinners(card, index) {
     // Use a Set to track player's numbers for faster lookups
-    let playerNumbersSet = new Set(card[1]);
-    let tempScores = card[0].filter(num => playerNumbersSet.has(num)); // Get the matches
+    let winningNumbersSet = new Set(card[0]);
+    let tempScores = card[1].filter(num => winningNumbersSet.has(num)); // Get the matches
 
     // Calculate score based on the number of matches
     let score = 0;
@@ -279,11 +280,23 @@ function assignWinners(card, index) {
             break;
     }
 
+    //console.log(score);
+
     // Add the score to cardsArr for the next cards
+    //console.log("cardsArr[index]: ", cardsArr[index]);
+    
+
+    if (score > 220 - index) { // dont need cards above 220
+        score = 220 - index;
+    }
+
+    //console.log("score: " + score);
 
     for (let i = 0; i < score; i++) {
         if (cardsArr[index + i + 1] !== undefined) {
-            cardsArr[index + i + 1] += 1; // Avoid accessing out-of-bounds
+            console.log("1: ", cardsArr[index + i + 1]);
+            console.log("2: ", cards[index]);
+            cardsArr[index + i + 1] += cardsArr[index]; // Avoid accessing out-of-bounds
         }
     }
 }
