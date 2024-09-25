@@ -294,8 +294,10 @@ function assignWinners(card, index) {
 
     for (let i = 0; i < score; i++) {
         if (cardsArr[index + i + 1] !== undefined) {
-            console.log("1: ", cardsArr[index + i + 1]);
-            console.log("2: ", cards[index]);
+            if (index < 3) {
+                console.log("1: ", cardsArr[index + i + 1]);
+                console.log("2: ", cardsArr[index]);
+            }
             cardsArr[index + i + 1] += cardsArr[index]; // Avoid accessing out-of-bounds
         }
     }
